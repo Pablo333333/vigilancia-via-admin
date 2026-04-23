@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Comunicado, EstadoReporte, LoginResponse, Reporte, Usuario } from './types';
+import type { Comunicado, EstadoReporte, LoginResponse, Reporte, TipoProblema, Usuario } from './types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
