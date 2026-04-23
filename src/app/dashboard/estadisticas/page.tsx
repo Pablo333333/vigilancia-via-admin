@@ -41,11 +41,37 @@ export default function EstadisticasPage() {
   })).sort((a, b) => b.total - a.total);
 
   // ─── Por estado (pie) ──────────────────────────────────────────────────────
-  const byEstado = [
+  const byEstadoRaw = [
     { name: ESTADO_LABELS.PENDIENTE,   value: pendientes },
     { name: ESTADO_LABELS.EN_PROCESO,  value: enProceso },
     { name: ESTADO_LABELS.SOLUCIONADO, value: solucionados },
   ].filter((s) => s.value > 0);
+
+  // Asegurar que la suma de porcentajes sea exactamente 100%
+  const sum = byEstadoRaw.reduce((acc, curr) => acc + curr.value, 0);
+  let byEstado = byEstadoRaw.map(item => ({
+    ...item,
+    percentage: sum > 0 ? Math.floor((item.value / sum) * 100) : 0
+  }));
+
+  if (sum > 0) {
+    const currentSum = byEstado.reduce((acc, curr) => acc + curr.percentage, 0);
+    const diff = 100 - currentSum;
+    if (diff > 0) {
+      // Asignar la diferencia al valor más alto para redondear a 100%
+      let maxIdx = 0;
+      for (let i = 1; i < byEstado.length; i++) {
+        if (byEstado[i].value > byEstado[maxIdx].value) maxIdx = i;
+      }
+      byEstado[maxIdx].percentage += diff;
+    }
+  }
+
+  // Usar el porcentaje en el nombre para mostrarlo en la leyenda
+  byEstado = byEstado.map(item => ({
+    ...item,
+    displayName: `${item.name} (${item.percentage}%)`
+  }));
 
   // ─── Tendencia diaria (últimos 14 días) ───────────────────────────────────
   const dailyTrend = Array.from({ length: 14 }, (_, i) => {
@@ -120,7 +146,8 @@ export default function EstadisticasPage() {
                     innerRadius={60}
                     outerRadius={90}
                     paddingAngle={3}
-                    dataKey="value"
+                    dataKey="percentage"
+                    nameKey="displayName"
                   >
                     {byEstado.map((_, i) => (
                       <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />

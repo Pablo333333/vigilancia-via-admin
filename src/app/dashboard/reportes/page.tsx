@@ -201,7 +201,7 @@ export default function ReportesPage() {
             <table className="w-full text-sm">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  {['Fecha', 'Tipo de problema', 'Estado', 'Reportante', 'Coordenadas', ''].map((h) => (
+                  {['Fecha', 'Tipo de problema', 'Estado', 'Reportado por', ''].map((h) => (
                     <th key={h} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 whitespace-nowrap">
                       {h}
                     </th>
@@ -226,11 +226,8 @@ export default function ReportesPage() {
                         {ESTADO_LABELS[r.estado]}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-slate-500 max-w-[160px] truncate">
-                      {r.reportante?.email ?? r.reportanteId.slice(0, 8) + '…'}
-                    </td>
-                    <td className="px-4 py-3 text-slate-500 font-mono text-xs whitespace-nowrap">
-                      {r.latitud.toFixed(4)}, {r.longitud.toFixed(4)}
+                    <td className="px-4 py-3 text-slate-500">
+                      {r.reportante?.email ?? (r.reportanteId ? (r.reportanteId.length > 8 ? r.reportanteId.slice(0, 8) + '…' : r.reportanteId) : 'Anónimo')}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <span className="text-primary-600 hover:text-primary-800 font-medium text-xs">

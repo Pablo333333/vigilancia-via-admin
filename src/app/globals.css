@@ -46,4 +46,10 @@
   .label {
     @apply text-xs font-semibold uppercase tracking-wide text-slate-500;
   }
+
+  /* Desactivar íconos nativos del navegador en inputs de contraseña */
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
+  }
 }

@@ -4,6 +4,9 @@ import { useAuth } from '@/hooks/useAuth';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import NewReportModal from '@/components/reports/NewReportModal';
+import { Plus } from 'lucide-react';
 
 const PAGE_META: Record<string, { title: string; subtitle: string }> = {
   '/dashboard/mapa':         { title: 'Mapa de Incidentes',   subtitle: 'Vista geográfica de todos los reportes activos' },
@@ -15,6 +18,7 @@ const PAGE_META: Record<string, { title: string; subtitle: string }> = {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, isLoading, logout } = useAuth();
   const pathname = usePathname();
+  const [showNewReport, setShowNewReport] = useState(false);
 
   const meta = PAGE_META[pathname] ?? { title: 'Panel Admin', subtitle: '' };
 
@@ -31,9 +35,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Sidebar user={user} onLogout={logout} />
 
       <div className="pl-64 flex flex-col min-h-screen">
-        <Header title={meta.title} subtitle={meta.subtitle} />
+        <Header title={meta.title} subtitle={meta.subtitle}>
+          <button
+            onClick={() => setShowNewReport(true)}
+            className="btn-primary gap-1.5 px-3 py-1.5 text-xs shadow-sm"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Nuevo Reporte
+          </button>
+        </Header>
         <main className="flex-1 p-6">{children}</main>
       </div>
+
+      {showNewReport && (
+        <NewReportModal
+          onClose={() => setShowNewReport(false)}
+          onSuccess={() => {
+            setShowNewReport(false);
+            // Esto refrescará la página actual si es necesario, 
+            // aunque el estado interno del componente hijo podría no verse afectado sin un reload
+            window.location.reload();
+          }}
+        />
+      )}
     </div>
   );
 }

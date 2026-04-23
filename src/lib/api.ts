@@ -48,6 +48,9 @@ export const ReportsAPI = {
       estado,
       ...(comentarioResolucion?.trim() && { comentarioResolucion }),
     }),
+
+  create: (payload: { tipoProblema: TipoProblema; comentario?: string; latitud: number; longitud: number }) =>
+    apiClient.post<Reporte>('/reports', payload),
 };
 
 export const ComunicadosAPI = {

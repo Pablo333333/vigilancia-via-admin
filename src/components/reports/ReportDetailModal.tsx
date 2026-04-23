@@ -80,13 +80,13 @@ export default function ReportDetailModal({ report, onClose, onStatusUpdate }: P
               {format(parseISO(report.fechaCreacion), "dd MMM yyyy 'a las' HH:mm", { locale: es })}
             </InfoRow>
 
-            <InfoRow label="Reportante">
-              {report.reportante?.email ?? report.reportanteId}
+            <InfoRow label="Reportado por">
+              {report.reportante?.email ?? (report.reportanteId ? report.reportanteId : 'Anónimo')}
             </InfoRow>
 
-            <InfoRow label="Coordenadas">
-              <span className="font-mono text-xs">
-                {report.latitud.toFixed(5)}, {report.longitud.toFixed(5)}
+            <InfoRow label="Ubicación">
+              <span className="text-slate-500 text-sm">
+                Referenciada por GPS
               </span>
             </InfoRow>
 
