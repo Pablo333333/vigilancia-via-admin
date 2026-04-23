@@ -66,10 +66,10 @@ export default function EstadisticasPage() {
     }
   }
 
-  // Usar el valor en el nombre para mostrarlo en la leyenda (según pedido: "Pendientes: 7")
+  // Preparar nombres para la leyenda (según pedido: "Pendiente:7")
   byEstado = byEstado.map(item => ({
     ...item,
-    displayName: `${item.name}: ${item.value}`
+    displayName: `${item.name}:${item.value}`
   }));
 
   // ─── Tendencia diaria (últimos 14 días) ───────────────────────────────────
@@ -152,8 +152,16 @@ export default function EstadisticasPage() {
                       <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e2e8f0' }} />
-                  <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} />
+                  <Tooltip 
+                    contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}
+                    formatter={(_value: any, _name: any, props: any) => [props.payload.payload.value, 'Reportes']}
+                  />
+                  <Legend 
+                    iconType="circle" 
+                    iconSize={10} 
+                    wrapperStyle={{ fontSize: 12 }}
+                    formatter={(value) => <span className="text-slate-700">{value}</span>}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </>
