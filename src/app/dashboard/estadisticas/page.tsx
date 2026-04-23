@@ -32,7 +32,6 @@ export default function EstadisticasPage() {
   const pendientes  = reports.filter((r) => r.estado === 'PENDIENTE').length;
   const enProceso   = reports.filter((r) => r.estado === 'EN_PROCESO').length;
   const solucionados = reports.filter((r) => r.estado === 'SOLUCIONADO').length;
-  const tasaResolucion = total > 0 ? Math.round((solucionados / total) * 100) : 0;
 
   // ─── Por tipo de problema ─────────────────────────────────────────────────
   const byTipo = TIPOS.map((tipo) => ({
@@ -67,10 +66,10 @@ export default function EstadisticasPage() {
     }
   }
 
-  // Usar el porcentaje en el nombre para mostrarlo en la leyenda
+  // Usar el valor en el nombre para mostrarlo en la leyenda (según pedido: "Pendientes: 7")
   byEstado = byEstado.map(item => ({
     ...item,
-    displayName: `${item.name} (${item.percentage}%)`
+    displayName: `${item.name}: ${item.value}`
   }));
 
   // ─── Tendencia diaria (últimos 14 días) ───────────────────────────────────
@@ -110,7 +109,7 @@ export default function EstadisticasPage() {
         <KpiCard Icon={FileText}     color="blue"   label="Total reportes"       value={total} />
         <KpiCard Icon={AlertTriangle} color="red"    label="Pendientes"           value={pendientes} />
         <KpiCard Icon={Clock}        color="amber"  label="En proceso"           value={enProceso} />
-        <KpiCard Icon={CheckCircle2} color="green"  label="Tasa de resolución"   value={`${tasaResolucion}%`} />
+        <KpiCard Icon={CheckCircle2} color="green"  label="Solucionados"         value={solucionados} />
       </div>
 
       {/* ─── Gráficos fila 1 ────────────────────────────────────────────────── */}
